@@ -1,6 +1,7 @@
 package models;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,15 +10,16 @@ import java.util.List;
 
 @Table(name = "categories")
 @Data
-@Entity
+@AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     private String name;
-    
+
     @OneToMany
     private List<Expense> expenses;
 }

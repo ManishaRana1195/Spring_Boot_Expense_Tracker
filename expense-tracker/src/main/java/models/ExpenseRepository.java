@@ -1,7 +1,8 @@
-package com.manisharana.expensetracker.repository;
+package models;
 
-import models.Expense;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ExpenseRepository  extends CrudRepository<Expense, Long> {
 }

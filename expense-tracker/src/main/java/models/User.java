@@ -8,16 +8,17 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
+
 @Data                   // lombok provides getters and setters for all fields
 @AllArgsConstructor
 @NoArgsConstructor      // lombok annotation for providing no argument constructor
 @Table(name = "users")
+@Entity
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     private String name;
 
