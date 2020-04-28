@@ -1,4 +1,4 @@
-package models;
+package com.manisharana.expensetracker.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

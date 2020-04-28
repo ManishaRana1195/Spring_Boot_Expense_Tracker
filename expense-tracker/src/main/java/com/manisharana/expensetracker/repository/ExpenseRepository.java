@@ -1,5 +1,6 @@
-package models;
+package com.manisharana.expensetracker.repository;
 
+import com.manisharana.expensetracker.models.Expense;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
