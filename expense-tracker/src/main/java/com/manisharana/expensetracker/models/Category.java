@@ -25,4 +25,9 @@ public class Category {
 
     @OneToMany
     private List<Expense> expenses;
+
+    public Category(int _id, String _name) {
+        id = _id;
+        name = _name;
+    }
 }
