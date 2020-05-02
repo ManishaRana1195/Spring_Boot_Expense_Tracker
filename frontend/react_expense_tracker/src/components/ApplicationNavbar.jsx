@@ -14,7 +14,7 @@ function ApplicationNavbar() {
         <NavbarBrand href="/">Expense Track Application</NavbarBrand>
         <Nav className="mr-auto" navbar>
           <NavItem>
-            <NavLink href="/home/">Home</NavLink>
+            <NavLink href="/">Home</NavLink>
           </NavItem>
           <NavItem>
             <NavLink href="/categories">Categories</NavLink>
