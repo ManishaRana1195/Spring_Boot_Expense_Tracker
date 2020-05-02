@@ -31,7 +31,7 @@ public class CategoryController {
                 new Category(2, "Shopping"),
                 new Category(3, "Medical"),
                 new Category(4, "Food"),
-                new Category(4, "Entertainment")
+                new Category(5, "Entertainment")
         );
         return result;
     }
