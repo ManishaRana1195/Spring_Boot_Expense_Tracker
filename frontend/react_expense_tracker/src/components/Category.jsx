@@ -18,9 +18,9 @@ class Category extends Component {
     return (
       <div>
         <h2>Categories</h2>
-        {Categories.map(category => 
-          <div id={category.id}>{category.name}</div>
-        )}
+        {Categories.map(category => (
+          <div key={category.id}>{category.name}</div>
+        ))}
       </div>
     );
   }
