@@ -1,22 +1,48 @@
 import React, { Component } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { Container, Input, Form, FormGroup, Button, Label } from "reactstrap";
+import {
+  Table,
+  Container,
+  Input,
+  Form,
+  FormGroup,
+  Button,
+  Label
+} from "reactstrap";
 
 class Expense extends Component {
-  state = {
-    title: "",
-    isLoading: true,
-    startDate: new Date(),
-    expenses: [],
-    categories: []
+  newExpense = {
+    expenseAmount: 0,
+    expenseDate: new Date(),
+    description: "",
+    location: "",
+    category: [1, "Travel"],
+    user: [101, "Manisha", "manisha@gmail.com"]
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      title: "",
+      isLoading: true,
+      startDate: new Date(),
+      expenses: [],
+      categories: [],
+      currentExpenseObject: this.newExpense
+    };
+  }
 
   async componentDidMount() {
     const response = await fetch("/api/categories");
     const body = await response.json();
 
     this.setState({ categories: body, isLoading: false });
+
+    const expenseList = await fetch("/api/expenses");
+    const expenseBody = await expenseList.json();
+
+    this.setState({ expenses: expenseBody, isLoading: false });
   }
 
   handleTitleChange = () => {
@@ -33,8 +59,42 @@ class Expense extends Component {
     });
   };
 
+  async deleteExpense(id) {
+    await fetch("/api/expenses/${id}", {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    }).then(() => {
+      let updatedExpenses = [...this.state.expenses].filter(
+        expense => expense.id !== id
+      );
+      this.setState({ expenses: updatedExpenses });
+    });
+  }
+
   render() {
-    const { categories, isLoading } = this.state;
+    const { categories } = this.state;
+    const { expenses, isLoading } = this.state;
+    const expenseRows = expenses.map(expense => (
+      <tr>
+        <td>{expense.expenseDate}</td>
+        <td>{expense.expenseAmount}</td>
+        <td>{expense.description}</td>
+        <td>{expense.category.name}</td>
+        <td>{expense.location}</td>
+        <td>
+          <button
+            size="sm"
+            className="btn btn-danger"
+            onClick={() => this.deleteExpense(expense.id)}
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    ));
 
     if (isLoading) return <div>Loading Expense</div>;
 
@@ -99,11 +159,26 @@ class Expense extends Component {
             </Button>
           </FormGroup>
           <FormGroup>
-            <Button color="seceondary" type="reset">
+            <Button color="secondary" type="reset">
               Reset
             </Button>
           </FormGroup>
         </Form>
+
+        <Container>
+          <h3>Expense List</h3>
+          <Table className="expense-list">
+            <tr>
+              <th width="10%">Date</th>
+              <th width="10%">Amount</th>
+              <th width="20%">Description</th>
+              <th width="10%">Category</th>
+              <th width="10%">Location</th>
+              <th width="10%">Action</th>
+            </tr>
+            <tbody>{expenseRows}</tbody>
+          </Table>
+        </Container>
       </Container>
     );
   }
