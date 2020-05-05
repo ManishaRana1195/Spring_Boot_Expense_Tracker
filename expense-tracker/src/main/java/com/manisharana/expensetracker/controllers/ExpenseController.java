@@ -31,7 +31,7 @@ public class ExpenseController {
 
         Expense expense1 = new Expense(1, 210, Instant.now(), "New York Trip", "California", travel, userA);
         Expense expense2 = new Expense(2, 300, Instant.now(), "Florida Disneyland Ticket", "Florida", entertainment, userA);
-        Expense expense3 = new Expense(2, 100, Instant.now(), "Weekend Dining Out at Fadi", "Santa Monica", food, userA);
+        Expense expense3 = new Expense(3, 100, Instant.now(), "Weekend Dining Out at Fadi", "Santa Monica", food, userA);
         return Arrays.asList(expense1, expense2, expense3);
     }
 

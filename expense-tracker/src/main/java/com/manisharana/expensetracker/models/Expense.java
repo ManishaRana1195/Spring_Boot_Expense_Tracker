@@ -21,10 +21,10 @@ public class Expense {
     private long id;
 
     @NonNull
-    private long expenseAmount;
+    private long amount;
 
     @NonNull
-    private Instant expenseDate;
+    private Instant date;
     private String description;
     private String location;
 
