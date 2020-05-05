@@ -37,16 +37,4 @@ public class Expense {
     @JsonIgnore
     private User user;
 
-    public Expense() {
-    }
-
-    public Expense(long id, long expenseAmount, Instant expenseDate, String description, String location, Category category, User user) {
-        this.id = id;
-        this.expenseAmount = expenseAmount;
-        this.expenseDate = expenseDate;
-        this.description = description;
-        this.location = location;
-        this.category = category;
-        this.user = user;
-    }
 }

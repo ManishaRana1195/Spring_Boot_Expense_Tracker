@@ -27,9 +27,6 @@ public class User {
     @OneToMany
     private List<Expense> expenses;
 
-    public User() {
-    }
-
     public User(long id, String name, String emailId) {
         this.id = id;
         this.name = name;

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,16 +23,8 @@ public class CategoryController {
     @GetMapping("/categories")
     private List<Category> getAllCategories() {
 
-        /*need to add h2 database to application, till then hardcoding*/
-
         List<Category> categoryList = (List<Category>) categoryRepository.findAll();
-        List<Category> result = Arrays.asList(new Category(1, "Travel"),
-                new Category(2, "Shopping"),
-                new Category(3, "Medical"),
-                new Category(4, "Food"),
-                new Category(5, "Entertainment")
-        );
-        return result;
+        return categoryList;
     }
 
     @GetMapping("/category/{id}")
