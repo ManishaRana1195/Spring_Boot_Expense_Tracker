@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Moment from "react-moment";
 import {
   Table,
   Container,
@@ -13,8 +14,8 @@ import {
 
 class Expense extends Component {
   newExpense = {
-    expenseAmount: 0,
-    expenseDate: new Date(),
+    amount: 0,
+    date: new Date(),
     description: "",
     location: "",
     category: [1, "Travel"],
@@ -26,11 +27,12 @@ class Expense extends Component {
     this.state = {
       title: "",
       isLoading: true,
-      startDate: new Date(),
       expenses: [],
       categories: [],
       currentExpenseObject: this.newExpense
     };
+
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
 
   async componentDidMount() {
@@ -45,22 +47,26 @@ class Expense extends Component {
     this.setState({ expenses: expenseBody, isLoading: false });
   }
 
-  handleTitleChange = () => {
-    console.log("title is clicked");
+  handleFieldUpdate = event => {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
+    let expense = { ...this.state.currentExpenseObject };
+    expense[name] = value;
+    this.setState({ currentExpenseObject: expense });
   };
 
-  handleCategoryChange = () => {
-    console.log("title is clicked");
-  };
-
-  handleChange = date => {
+  handleDateChange = date => {
+    let newExpenseObject = { ...this.state.currentExpenseObject };
+    newExpenseObject.date = date;
     this.setState({
-      startDate: date
+      currentExpenseObject: newExpenseObject
     });
   };
 
   async deleteExpense(id) {
-    await fetch("/api/expenses/${id}", {
+    await fetch(`/api/expenses/${id}`, {
       method: "DELETE",
       headers: {
         Accept: "application/json",
@@ -74,15 +80,33 @@ class Expense extends Component {
     });
   }
 
+  async handleFormSubmit(event) {
+    /*prevents auto submission*/
+    event.preventDefault();
+    const { expenseObject } = this.state.currentExpenseObject;
+    await fetch("/api/expense", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(expenseObject)
+    });
+
+    this.props.history.push("/expenses");
+  }
+
   render() {
     const { categories } = this.state;
     const { expenses, isLoading } = this.state;
     const expenseRows = expenses.map(expense => (
-      <tr>
-        <td>{expense.expenseDate}</td>
-        <td>{expense.expenseAmount}</td>
-        <td>{expense.description}</td>
+      <tr key={expense.id}>
+        <td>
+          <Moment format='YYYY/MM/DD'>{expense.date}</Moment>{" "}
+        </td>
+        <td>{expense.amount}</td>
         <td>{expense.category.name}</td>
+        <td>{expense.description}</td>
         <td>{expense.location}</td>
         <td>
           <button
@@ -103,12 +127,12 @@ class Expense extends Component {
         <h2>Add Expense</h2>
         <Form onSubmit={this.handleFormSubmit}>
           <FormGroup>
-            <Label for="amount">Expense Amount</Label>
+            <Label for="amount">Amount</Label>
             <Input
               type="number"
               name="amount"
               id="amount"
-              onChange={this.handleTitleChange}
+              onChange={this.handleFieldUpdate}
             ></Input>
           </FormGroup>
 
@@ -118,7 +142,7 @@ class Expense extends Component {
               type="text"
               name="description"
               id="description"
-              onChange={this.handleTitleChange}
+              onChange={this.handleFieldUpdate}
             ></Input>
           </FormGroup>
 
@@ -127,7 +151,7 @@ class Expense extends Component {
             <select
               name="category"
               id="category"
-              onChange={this.handleCategoryChange}
+              onChange={this.handleFieldUpdate}
             >
               {categories.map(category => (
                 <option key={category.id}>{category.name}</option>
@@ -136,10 +160,10 @@ class Expense extends Component {
           </FormGroup>
 
           <FormGroup>
-            <Label for="expenseDate">Expense Date</Label>
+            <Label for="date">Date</Label>
             <DatePicker
-              selected={this.state.startDate}
-              onChange={this.handleChange}
+              selected={this.state.currentExpenseObject.date}
+              onChange={this.handleDateChange}
             />
           </FormGroup>
 
@@ -149,7 +173,7 @@ class Expense extends Component {
               type="text"
               name="location"
               id="location"
-              onChange={this.handleCategoryChange}
+              onChange={this.handleFieldUpdate}
             ></Input>
           </FormGroup>
 
@@ -168,14 +192,16 @@ class Expense extends Component {
         <Container>
           <h3>Expense List</h3>
           <Table className="expense-list">
-            <tr>
-              <th width="10%">Date</th>
-              <th width="10%">Amount</th>
-              <th width="20%">Description</th>
-              <th width="10%">Category</th>
-              <th width="10%">Location</th>
-              <th width="10%">Action</th>
-            </tr>
+            <thead>
+              <tr>
+                <th width="10%">Date</th>
+                <th width="10%">Amount</th>
+                <th width="20%">Description</th>
+                <th width="10%">Category</th>
+                <th width="10%">Location</th>
+                <th width="10%">Action</th>
+              </tr>
+            </thead>
             <tbody>{expenseRows}</tbody>
           </Table>
         </Container>
