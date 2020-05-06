@@ -1,0 +1,9 @@
+.expenseHeader {
+  justify-content: left;
+  text-align: left;
+  margin-top: 20px;
+}
+
+.react-datepicker__input-container input {
+    width: 100%;
+ }

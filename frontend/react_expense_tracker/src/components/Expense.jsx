@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Moment from "react-moment";
+import "./Expense.css";
 import {
   Table,
   Container,
@@ -84,7 +85,8 @@ class Expense extends Component {
     /*prevents auto submission*/
     event.preventDefault();
     const { expenseObject } = this.state.currentExpenseObject;
-    await fetch("/api/expense", {
+    console.log(expenseObject);
+    await fetch("/api/expenses", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -102,9 +104,9 @@ class Expense extends Component {
     const expenseRows = expenses.map(expense => (
       <tr key={expense.id}>
         <td>
-          <Moment format='YYYY/MM/DD'>{expense.date}</Moment>{" "}
+          <Moment format="YYYY/MM/DD">{expense.date}</Moment>{" "}
         </td>
-        <td>{expense.amount}</td>
+        <td>${expense.amount}</td>
         <td>{expense.category.name}</td>
         <td>{expense.description}</td>
         <td>{expense.location}</td>
@@ -124,9 +126,9 @@ class Expense extends Component {
 
     return (
       <Container>
-        <h2>Add Expense</h2>
+        <h2 className="expenseHeader">Add Expense</h2>
         <Form onSubmit={this.handleFormSubmit}>
-          <FormGroup>
+          <FormGroup className="form-group col-md-6">
             <Label for="amount">Amount</Label>
             <Input
               type="number"
@@ -136,7 +138,7 @@ class Expense extends Component {
             ></Input>
           </FormGroup>
 
-          <FormGroup>
+          <FormGroup className="form-group col-md-6">
             <Label for="description">Description</Label>
             <Input
               type="text"
@@ -146,12 +148,13 @@ class Expense extends Component {
             ></Input>
           </FormGroup>
 
-          <FormGroup>
+          <FormGroup className="form-group col-md-6">
             <Label for="category">Category</Label>
             <select
               name="category"
               id="category"
               onChange={this.handleFieldUpdate}
+              style={{ width: "100%" }}
             >
               {categories.map(category => (
                 <option key={category.id}>{category.name}</option>
@@ -159,15 +162,7 @@ class Expense extends Component {
             </select>
           </FormGroup>
 
-          <FormGroup>
-            <Label for="date">Date</Label>
-            <DatePicker
-              selected={this.state.currentExpenseObject.date}
-              onChange={this.handleDateChange}
-            />
-          </FormGroup>
-
-          <FormGroup>
+          <FormGroup className="form-group col-md-6">
             <Label for="location">Location</Label>
             <Input
               type="text"
@@ -177,27 +172,37 @@ class Expense extends Component {
             ></Input>
           </FormGroup>
 
-          <FormGroup>
-            <Button color="primary" type="submit">
+          <FormGroup className="form-group col-md-6">
+            <Label for="date">Date</Label>
+            <br />
+            <DatePicker
+              selected={this.state.currentExpenseObject.date}
+              onChange={this.handleDateChange}
+            />
+          </FormGroup>
+
+          <FormGroup
+            className="form-group col-md-6"
+            style={{ justifyContent: "center", textAlign: "center" }}
+          >
+            <Button color="primary" type="submit" style={{ margin: "10px" }}>
               Save
             </Button>
-          </FormGroup>
-          <FormGroup>
-            <Button color="secondary" type="reset">
+            <Button color="secondary" type="reset" style={{ margin: "10px" }}>
               Reset
             </Button>
           </FormGroup>
         </Form>
 
         <Container>
-          <h3>Expense List</h3>
+          <h3>Previous Expenses</h3>
           <Table className="expense-list">
             <thead>
               <tr>
                 <th width="10%">Date</th>
                 <th width="10%">Amount</th>
-                <th width="20%">Description</th>
                 <th width="10%">Category</th>
+                <th width="20%">Description</th>
                 <th width="10%">Location</th>
                 <th width="10%">Action</th>
               </tr>

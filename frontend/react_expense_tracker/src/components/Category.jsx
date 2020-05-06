@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Container } from "reactstrap";
 
 class Category extends Component {
   state = {
@@ -16,12 +17,14 @@ class Category extends Component {
     const { Categories, isLoading } = this.state;
     if (isLoading) return <div> Loading...</div>;
     return (
-      <div>
+      <Container>
         <h2>Categories</h2>
-        {Categories.map(category => (
-          <div key={category.id}>{category.name}</div>
-        ))}
-      </div>
+        <ul class="list-group">
+          {Categories.map(category => (
+              <li class="list-group-item" key={category.id}>{category.name}</li>
+          ))}
+        </ul>
+      </Container>
     );
   }
 }
